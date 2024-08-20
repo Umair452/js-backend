@@ -76,6 +76,7 @@ async function fetchPopularMovies() {
         // newTitle.textContent = result.data.list[1].originalTitle;
         // console.log(result.data.list[0].title.originalTitleText);
         const movieList = result.data.list;
+        
         for (let i = 0; i < movieList.length; i++) {
     let currentTitle = movieList[i]?.title?.originalTitleText;
 
