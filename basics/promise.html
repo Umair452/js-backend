@@ -15,7 +15,7 @@
             <form onsubmit="handle_form(event)" id="header_form">
               <div class="header_form-icon">
               <input id="input" type="search" class="header_form-input" placeholder="Search, Press Enter to Submit" />
-             <img onclick="displayData()" id="searchIcon" class="icon" src="../images/search.svg" alt="">
+             <img onclick="fetchPopularMovies()" id="searchIcon" class="icon" src="../images/search.svg" alt="">
             </div>
             </form>
             <img id="img_icon" width="32px" height="32px" src="" alt="" >
@@ -55,36 +55,6 @@
   </body>
   <script>
 
-// const movieData = "http://www.omdbapi.com";
-// let xhr = new XMLHttpRequest();
-// xhr.open('GET', movieData);
-// xhr.send();
-
-// const input = document.querySelector('#input');
-// const btn = document.querySelector('#searchIcon');
-
-// let Data = null;
-
-// xhr.onreadystatechange = function () {
-
-//     let fetchedData = null
-
-//     if (xhr.readyState === 4) {
-//        fetchedData = JSON.parse(this.responseText);
-//        Data = fetchedData
-       
-//     }
-// };
-
-
-// function displayData (){
-//   let source = Data[1].title;
-//   let image = document.querySelector('#img_src')
-//   let newTitle = document.querySelector('#title')
-//   newTitle.textContent = source
-  
-  
-// }
 
 
 const url = 'https://imdb188.p.rapidapi.com/api/v1/getPopularMovies';
@@ -94,43 +64,44 @@ const options = {
         'x-rapidapi-key': 'c1c6367ff1msh2d1b91ac477a91dp1b3c7cjsn5188f8cf00a8',
         'x-rapidapi-host': 'imdb188.p.rapidapi.com',
         'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ // Convert the body to a JSON string
-        country: {
-            anyPrimaryCountries: ['IN']
-        },
-        limit: 200,
-        releaseDate: {
-            releaseDateRange: {
-                end: '2029-12-31',
-                start: '2020-01-01'
-            }
-        },
-        userRatings: {
-            aggregateRatingRange: { max: 10, min: 6 },
-            ratingsCountRange: { min: 1000 }
-        },
-        genre: {
-            allGenreIds: ['Action']
-        },
-        runtime: {
-            runtimeRangeMinutes: { max: 120, min: 0 }
-        }
-    })
+    }
 };
 
 async function fetchPopularMovies() {
     try {
         const response = await fetch(url, options);
-        const result = await response.text(); // or use response.json() if the response is in JSON format
-        console.log(result);
+        const result = await response.json(); // or use response.json() if the response is in JSON format
+        let newTitle = document.querySelector('#title')
+        let inputUser = document.querySelector('#input').value
+        // newTitle.textContent = result.data.list[1].originalTitle;
+        // console.log(result.data.list[0].title.originalTitleText);
+        const movieList = result.data.list;
+        for (let i = 0; i < movieList.length; i++) {
+    let currentTitle = movieList[i]?.title?.originalTitleText;
+
+    // Check if currentTitle is a string and includes the user's input
+    if (currentTitle.includes(inputUser)) {
+        // // Update the text content of the <h2> element with the matching movie title
+        // newTitle.textContent = currentTitle;
+        console.log(newTitle.textContent);
+        console.log(currentTitle);
+        
+        
+        
+        break; // Exit the loop once the match is found and title is updated
+    }
+}
+
+        
     } catch (error) {
         console.error('Error fetching popular movies:', error);
     }
 }
 
 // Call the function to fetch the data
-fetchPopularMovies();
+
+
+
 
 
 
