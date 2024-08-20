@@ -18,7 +18,7 @@
              <img onclick="getMovie()" id="searchIcon" class="icon" src="../images/search.svg" alt="">
             </div>
             </form>
-            <img id="img_icon" width="32px" height="32px" src="" alt="" >
+            
           </div>
         </header>
         <main id="main">
@@ -113,40 +113,41 @@
 //   .catch(error => console.error('Error:', error));
 // }
 
-
 async function getMovie() {
   try {
+    let newTitle = document.querySelector('#title');
+    let inputUser = document.querySelector('#input').value.trim().toLowerCase();  // Trim whitespace and convert to lowercase
+    let image = document.querySelector('#img_src')
+    // Check if the input field is empty
+    if (!inputUser) {
+      return alert('Enter a valid title');
+    }
+  
     const response = await fetch("https://api.themoviedb.org/3/discover/movie?api_key=6486b6b98364b32c9e465af34609a9c0");
     const result = await response.json();
-    
-    let newTitle = document.querySelector('#title');
-    let inputUser = document.querySelector('#input').value;  // Convert input to lowercase for case-insensitive search
-    inputUser = null
     const movieList = result.results;  // Access the results array in the response
-
-    
+    console.log(movieList);
     for (let i = 0; i < movieList.length; i++) {
       let currentTitle = movieList[i]?.title?.toLowerCase();  // Convert movie title to lowercase
-
+      let imagePath = movieList[i].poster_path
       // Check if currentTitle is a string and includes the user's input
-      if (inputUser !=null && currentTitle.includes(inputUser)) {
+      if (currentTitle && currentTitle.includes(inputUser)) {
         newTitle.textContent = movieList[i].title;  // Update the text content of the <h2> element with the matching movie title
-        console.log(newTitle.textContent);
-        break;  // Exit the loop once the match is found and title is updated
+        image.setAttribute('src', imagePath)
+        return;  // Exit the function once the match is found and title is updated
       }
     }
 
     // Handle case where no matching movie is found
-    if (newTitle.textContent === '') {
-      newTitle.textContent = 'No matching movie found';
-    }
+    newTitle.textContent = 'No matching movie found';
 
-  } 
-  
-  catch (error) {
+  } catch (error) {
     console.error('Error fetching movies:', error);
   }
 }
+
+
+
 
 
 
