@@ -129,11 +129,13 @@ async function getMovie() {
     console.log(movieList);
     for (let i = 0; i < movieList.length; i++) {
       let currentTitle = movieList[i]?.title?.toLowerCase();  // Convert movie title to lowercase
-      let imagePath = movieList[i].poster_path
+      let imagePath = movieList[i].backdrop_path
       // Check if currentTitle is a string and includes the user's input
       if (currentTitle && currentTitle.includes(inputUser)) {
         newTitle.textContent = movieList[i].title;  // Update the text content of the <h2> element with the matching movie title
         image.setAttribute('src', imagePath)
+        console.log(imagePath);
+        
         return;  // Exit the function once the match is found and title is updated
       }
     }
